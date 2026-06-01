@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pretty Privilege — The Economics of Appearance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black:     #0A0A0A;
+    --off-black: #111111;
+    --dark:      #1A1A1A;
+    --mid:       #555550;
+    --muted:     #888884;
+    --border:    #E0DDD6;
+    --surface:   #F7F7F5;
+    --white:     #FFFFFF;
+    --accent:    #0A0A0A;
+
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans:  'DM Sans', system-ui, sans-serif;
+
+    --max: 1100px;
+    --section-gap: 120px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--black);
+    background: var(--white);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── UTILITIES ── */
+  .label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .rule {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 48px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav .inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 48px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--black);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--black); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: var(--black);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+    padding-top: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .hero-left {
+    padding: 80px 48px 80px 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 28px;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(52px, 6vw, 80px);
+    font-weight: 700;
+    line-height: 1.0;
+    color: var(--white);
+    margin-bottom: 32px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    max-width: 400px;
+    margin-bottom: 52px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 4px;
+    transition: border-color 0.2s;
+  }
+  .hero-cta:hover { border-color: var(--white); }
+  .hero-cta svg { width: 14px; height: 14px; }
+
+  .hero-right {
+    padding: 80px 48px 80px 0;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 0;
+  }
+
+  .hero-stat-block {
+    text-align: right;
+    margin-bottom: 40px;
+  }
+
+  .hero-stat {
+    font-family: var(--serif);
+    font-size: 80px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.05em;
+    margin-top: 6px;
+  }
+
+  .hero-divider {
+    width: 100%;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin: 16px 0;
+  }
+
+  .hero-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  .tag {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 5px 12px;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  section { padding: var(--section-gap) 0; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    margin-bottom: 64px;
+  }
+
+  .section-num {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--border);
+    padding-top: 6px;
+    min-width: 28px;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--black);
+  }
+
+  .section-sub {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* ── STAT CARDS ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .stat-card {
+    background: var(--white);
+    padding: 36px 32px;
+  }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+  }
+
+  .stat-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .stat-source {
+    font-size: 10px;
+    color: var(--border);
+    letter-spacing: 0.06em;
+    margin-top: 16px;
+    text-transform: uppercase;
+  }
+
+  /* ── SPLIT SECTION ── */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .split-body {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--dark);
+  }
+
+  .split-body p + p { margin-top: 20px; }
+
+  /* ── BIG QUOTE SECTION ── */
+  .quote-section {
+    background: var(--black);
+    padding: var(--section-gap) 0;
+  }
+
+  .pull-quote {
+    font-family: var(--serif);
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.25;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: -0.01em;
+    max-width: 800px;
+    margin-bottom: 28px;
+  }
+
+  .quote-attr {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+  }
+
+  /* ── MECHANISM CARDS ── */
+  .mech-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .mech-card {
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+  }
+
+  .mech-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--black);
+  }
+
+  .mech-stage {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .mech-stat {
+    font-family: var(--serif);
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .mech-body {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--mid);
+    line-height: 1.65;
+  }
+
+  /* ── QOVES SECTION ── */
+  .qoves-section {
+    background: var(--surface);
+    padding: var(--section-gap) 0;
+  }
+
+  .qoves-inner {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .qoves-stat-stack { display: flex; flex-direction: column; gap: 0; }
+
+  .qoves-stat-item {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+  }
+
+  .qoves-stat-item:first-child { border-top: 1px solid var(--border); }
+
+  .qoves-val {
+    font-family: var(--serif);
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1;
+    min-width: 120px;
+  }
+
+  .qoves-lbl {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+
+  .qoves-desc {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--dark);
+    line-height: 1.8;
+  }
+
+  .qoves-desc p + p { margin-top: 20px; }
+
+  .qoves-callout {
+    margin-top: 32px;
+    background: var(--black);
+    padding: 24px 28px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ── BAR CHART ── */
+  .chart-section { background: var(--white); }
+
+  .chart-wrapper {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .bar-chart { display: flex; flex-direction: column; gap: 20px; }
+
+  .bar-row { display: flex; flex-direction: column; gap: 8px; }
+
+  .bar-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .bar-label { font-size: 12px; font-weight: 400; color: var(--muted); letter-spacing: 0.05em; }
+  .bar-value { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--black); }
+
+  .bar-track {
+    height: 4px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--black);
+    transform-origin: left;
+    animation: growBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes growBar { from { transform: scaleX(0); } }
+
+  .bar-fill.tier-1 { background: #C8C8C4; }
+  .bar-fill.tier-2 { background: #888884; }
+  .bar-fill.tier-3 { background: #444441; }
+  .bar-fill.tier-4 { background: var(--black); }
+
+  .chart-insights { display: flex; flex-direction: column; gap: 0; }
+
+  .insight-item {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .insight-item:first-child { border-top: 1px solid var(--border); }
+
+  .insight-val {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 6px;
+  }
+
+  .insight-txt {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--mid);
+    line-height: 1.55;
+  }
+
+  /* ── GENDER SECTION ── */
+  .gender-section { background: var(--surface); padding: var(--section-gap) 0; }
+
+  .gender-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .gender-col {
+    background: var(--white);
+    padding: 40px 36px;
+  }
+
+  .gender-col-title {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gender-point {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--dark);
+    line-height: 1.55;
+  }
+
+  .gender-dash {
+    color: var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── RECOMMENDATIONS ── */
+  .rec-list { display: flex; flex-direction: column; gap: 0; }
+
+  .rec-item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 32px;
+    align-items: start;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .rec-item:first-child { border-top: 1px solid var(--border); }
+
+  .rec-num {
+    font-family: var(--serif);
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--border);
+    line-height: 1;
+  }
+
+  .rec-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 12px;
+  }
+
+  .rec-body {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--mid);
+    line-height: 1.7;
+  }
+
+  /* ── CLOSING HERO ── */
+  .closing {
+    background: var(--black);
+    padding: var(--section-gap) 0;
+    padding-bottom: 80px;
+  }
+
+  .closing-statement {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 56px;
+  }
+
+  .closing-statement .line-1 { color: var(--white); display: block; }
+  .closing-statement .line-2 { color: rgba(255,255,255,0.3); display: block; }
+
+  .closing-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 64px;
+  }
+
+  .closing-stat {
+    padding: 36px 0;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .closing-stat:last-child { border-right: none; }
+
+  .closing-stat-val {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .closing-stat-lbl {
+    font-size: 11px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.4;
+  }
+
+  /* ── SOURCES ── */
+  .sources-section { padding: 80px 0; }
+
+  .sources-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  .source-item {
+    background: var(--white);
+    padding: 20px 24px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .source-n {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--border);
+    min-width: 20px;
+    padding-top: 2px;
+  }
+
+  .source-txt {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--mid);
+    line-height: 1.55;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  .footer-note {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--border);
+  }
+
+  /* ── FADE-IN ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="inner">
+    <a href="#" class="nav-logo">Pretty Privilege</a>
+    <ul class="nav-links">
+      <li><a href="#lookism">Lookism</a></li>
+      <li><a href="#data">The Data</a></li>
+      <li><a href="#qoves">Qoves</a></li>
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#sources">Sources</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+
+  <div class="hero-left">
+    <p class="hero-eyebrow">Research Overview · 2024–2025</p>
+    <h1 class="hero-title">Pretty<br>Privilege<br><em>& Lookism</em></h1>
+    <p class="hero-sub">The systematic economic advantage granted to conventionally attractive workers — documented across four decades of research.</p>
+    <a href="#lookism" class="hero-cta">
+      Explore the evidence
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
+    </a>
+    <div class="hero-tags" style="margin-top: 48px; justify-content: flex-start;">
+      <span class="tag">Lookism</span>
+      <span class="tag">Beauty Premium</span>
+      <span class="tag">Wage Gap</span>
+      <span class="tag">Bias</span>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-stat-block">
+      <div class="hero-stat">$20K</div>
+      <div class="hero-stat-label">Annual earnings gap · attractive vs. unattractive workers</div>
+    </div>
+    <hr class="hero-divider">
+    <div class="hero-stat-block" style="margin-bottom: 0;">
+      <div class="hero-stat" style="font-size: 56px; color: rgba(255,255,255,0.35);">$250K</div>
+      <div class="hero-stat-label">Lifetime earnings advantage · Hamermesh (2011)</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 01: WHAT IS LOOKISM -->
+<section id="lookism">
+  <div class="container">
+    <div class="section-header fade-up">
+      <span class="section-num">01</span>
+      <div>
+        <h2 class="section-title">What is Lookism?</h2>
+        <p class="section-sub">Systematic discrimination based on physical appearance</p>
+      </div>
+    </div>
+
+    <div class="split fade-up">
+      <div>
+        <p class="split-body">
+          Lookism is the prejudice and discrimination directed at a person based on their physical appearance — particularly their perceived attractiveness. Unlike many forms of bias, it operates largely below conscious awareness, embedded in the instinctive judgments made in hiring rooms, performance reviews, and promotion decisions.
+        </p>
+        <p class="split-body" style="margin-top: 20px;">
+          In the scientific literature, the economic advantage enjoyed by attractive individuals is termed the <strong style="font-weight: 500;">"beauty premium"</strong> — a measurable, consistent, cross-cultural wage and career benefit that has been documented since the 1970s.
+        </p>
+        <p class="split-body" style="margin-top: 20px;">
+          Research published in the NIH (2024) finds that lookism in professional environments grants attractive individuals superior evaluations, assumed leadership capability, more advancement opportunities, and elevated wages — advantages that compound over a career.
+        </p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-num">81%</div>
+          <div class="stat-desc">of employed Americans believe "pretty privilege" exists at work</div>
+          <div class="stat-source">Standout CV · Dec 2024</div>
+        </div>
+        <div class="stat-card" style="background: var(--surface);">
+          <div class="stat-num">83%</div>
+          <div class="stat-desc">believe colleagues who invest more in appearance seem more professionally capable</div>
+          <div class="stat-source">Standout CV · Dec 2024</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">67%</div>
+          <div class="stat-desc">have personally witnessed appearance-based unfair treatment at their workplace</div>
+          <div class="stat-source">Standout CV · Dec 2024</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- SECTION 02: THE BEAUTY PREMIUM -->
+<section id="data">
+  <div class="container">
+    <div class="section-header fade-up">
+      <span class="section-num">02</span>
+      <div>
+        <h2 class="section-title">The Beauty Premium</h2>
+        <p class="section-sub">What four decades of economics research shows</p>
+      </div>
+    </div>
+
+    <!-- BIG HERO STAT -->
+    <div style="padding: 56px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 64px;" class="fade-up">
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;">
+        <div style="padding-right: 48px; border-right: 1px solid var(--border);">
+          <p class="label" style="margin-bottom: 16px;">Lifetime earnings advantage</p>
+          <p style="font-family: var(--serif); font-size: 72px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--black);">$250K</p>
+          <p style="font-size: 12px; font-weight: 300; color: var(--muted); margin-top: 12px; line-height: 1.55;">Most attractive workers vs. least attractive peers across a full career. Hamermesh, <em>Beauty Pays</em> (2011)</p>
+        </div>
+        <div style="padding: 0 48px; border-right: 1px solid var(--border);">
+          <p class="label" style="margin-bottom: 16px;">Wage penalty — unattractive women</p>
+          <p style="font-family: var(--serif); font-size: 72px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--black);">−12%</p>
+          <p style="font-size: 12px; font-weight: 300; color: var(--muted); margin-top: 12px; line-height: 1.55;">Compared to average-looking female peers, regardless of skill or performance. Hamermesh & Biddle (1994)</p>
+        </div>
+        <div style="padding-left: 48px;">
+          <p class="label" style="margin-bottom: 16px;">Wage penalty — unattractive men</p>
+          <p style="font-family: var(--serif); font-size: 72px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--black);">−13%</p>
+          <p style="font-size: 12px; font-weight: 300; color: var(--muted); margin-top: 12px; line-height: 1.55;">Men rated below-average in attractiveness face a larger earnings penalty than women do. Hamermesh (2011)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAR CHART -->
+    <div class="chart-wrapper fade-up">
+      <div>
+        <p class="label" style="margin-bottom: 28px;">Estimated annual earnings by attractiveness tier (USD)</p>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-meta">
+              <span class="bar-label">Unattractive</span>
+              <span class="bar-value">$42,000</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill tier-1" style="width: 53%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta">
+              <span class="bar-label">Average</span>
+              <span class="bar-value">$59,000</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill tier-2" style="width: 74%; animation-delay: 0.1s"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta">
+              <span class="bar-label">Attractive</span>
+              <span class="bar-value">$68,000</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill tier-3" style="width: 86%; animation-delay: 0.2s"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta">
+              <span class="bar-label">Extremely attractive</span>
+              <span class="bar-value">$79,000</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill tier-4" style="width: 100%; animation-delay: 0.3s"></div></div>
+          </div>
+        </div>
+        <p style="font-size: 10px; color: var(--border); margin-top: 20px; letter-spacing: 0.05em; text-transform: uppercase;">Source: Standout CV Survey, Dec 2024 · n = 1,050</p>
+      </div>
+
+      <div class="chart-insights">
+        <div class="insight-item">
+          <div class="insight-val">~$20K</div>
+          <div class="insight-txt">Average annual gap between top and bottom attractiveness tiers (Standout CV, 2024)</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-val">$230K</div>
+          <div class="insight-txt">Lifetime advantage for the most handsome workers over the least attractive — The Economist</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-val">5–10%</div>
+          <div class="insight-txt">Penalty for plain-looking workers vs. average across multiple national surveys (Hamermesh & Biddle, 1994)</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-val">57%</div>
+          <div class="insight-txt">Of hiring managers say unattractive but qualified candidates face a harder time landing a job</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PULL QUOTE -->
+<div class="quote-section">
+  <div class="container">
+    <p class="pull-quote fade-up">
+      "Plain people earn less than people of average looks, who earn less than the good-looking. The penalty for plainness is 5 to 10 percent — slightly larger than the premium for beauty."
+    </p>
+    <p class="quote-attr">— Hamermesh & Biddle · American Economic Review · 1994</p>
+  </div>
+</div>
+
+<!-- SECTION 03: HOW IT OPERATES -->
+<section>
+  <div class="container">
+    <div class="section-header fade-up">
+      <span class="section-num">03</span>
+      <div>
+        <h2 class="section-title">How Lookism Operates</h2>
+        <p class="section-sub">The four mechanisms of appearance-based discrimination</p>
+      </div>
+    </div>
+
+    <div class="mech-grid fade-up">
+      <div class="mech-card">
+        <div class="mech-stage">Hiring</div>
+        <div class="mech-stat">57%</div>
+        <div class="mech-body">of hiring managers report that qualified but unattractive candidates face a harder time landing a job — before a single skill is evaluated.</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-stage">Perception</div>
+        <div class="mech-stat">8 in 10</div>
+        <div class="mech-body">employees believe attractive colleagues are more likely to be hired, promoted, or given raises regardless of performance or qualifications.</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-stage">Conformity Pressure</div>
+        <div class="mech-stat">64%</div>
+        <div class="mech-body">of workers feel pressured to alter natural features — straightening hair, wearing makeup — just to meet unstated office appearance norms.</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-stage">Career Pipeline</div>
+        <div class="mech-stat">3–4%</div>
+        <div class="mech-body">wage premium for attractive workers in nearly all professions studied — not just appearance-forward industries like media or hospitality.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- SECTION 04: QOVES CASE STUDY -->
+<section class="qoves-section" id="qoves">
+  <div class="container">
+    <div class="section-header fade-up">
+      <span class="section-num">04</span>
+      <div>
+        <h2 class="section-title">The Market for Insecurity</h2>
+        <p class="section-sub">Qoves.com — a case study in monetized lookism</p>
+      </div>
+    </div>
+
+    <div class="qoves-inner fade-up">
+      <div>
+        <div class="qoves-desc">
+          <p>Qoves is an AI-powered facial aesthetics platform that analyzes over 100 unique facial markers and compares them against externally-defined "beauty standards" — then sells users a personalized transformation plan to correct what the algorithm determines is wrong with their face.</p>
+          <p>The service charges <strong style="font-weight: 500;">$149 per year</strong> for the privilege of receiving this critique. Users are given scores across 30+ facial dimensions — eyebrow density, jaw width, melanin concentration, lip projection — and prescribed a 4-month "glow-up protocol" based on over 2,000 cited clinical studies.</p>
+          <p>The platform's existence is a direct market response to lookism: people are willing to pay to be told they are not attractive enough, because they understand — correctly — that appearing more attractive carries real economic and social consequences.</p>
+        </div>
+        <div class="qoves-callout">
+          "The beauty industry is broken, with companies and doctors giving 'one size fits all' advice, and many people undergoing unnecessary procedures they don't need." — Qoves.com homepage
+        </div>
+      </div>
+
+      <div class="qoves-stat-stack">
+        <div class="qoves-stat-item">
+          <div class="qoves-val">100+</div>
+          <div class="qoves-lbl">facial markers analyzed per user session</div>
+        </div>
+        <div class="qoves-stat-item">
+          <div class="qoves-val">$149</div>
+          <div class="qoves-lbl">annual subscription to learn what is "wrong" with your face</div>
+        </div>
+        <div class="qoves-stat-item">
+          <div class="qoves-val">30+</div>
+          <div class="qoves-lbl">individual scores across facial features and skin metrics</div>
+        </div>
+        <div class="qoves-stat-item">
+          <div class="qoves-val">2,000+</div>
+          <div class="qoves-lbl">clinical studies cited to justify personalized recommendations</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 05: GENDER -->
+<section class="gender-section">
+  <div class="container">
+    <div class="section-header fade-up">
+      <span class="section-num">05</span>
+      <div>
+        <h2 class="section-title">The Gender Dimension</h2>
+        <p class="section-sub">Lookism intersects with and amplifies existing gender inequality</p>
+      </div>
+    </div>
+
+    <div class="gender-grid fade-up">
+      <div class="gender-col">
+        <div class="gender-col-title">Women</div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>Appearance norms are evaluated more strictly — makeup, hair texture, and attire are scrutinized daily as proxies for professionalism</span></div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>"Unattractive" women earn up to 12% less than their peers, regardless of skill or performance (Hamermesh & Biddle, 1994)</span></div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>More likely to be excluded from the labor market entirely if perceived as unattractive — not just underpaid</span></div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>In media, law, marketing, and hospitality, aesthetics often filter qualifications before an interview begins</span></div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>64% feel pressure to alter natural features just to fit unstated workplace appearance norms (Standout CV, 2024)</span></div>
+      </div>
+      <div class="gender-col">
+        <div class="gender-col-title">Men</div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>Attractive men earn 4% more than average-looking male peers with comparable education and experience (Hamermesh, 2011)</span></div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>Unattractive men face a 13% wage penalty — proportionally larger than the equivalent penalty for women</span></div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>Height and body size add additional dimensions of appearance-based bias — tall men are consistently rated as more competent</span></div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>37.5% of male respondents rated themselves 9 or 10 out of 10 for workplace attractiveness, versus significantly fewer women</span></div>
+        <div class="gender-point"><span class="gender-dash">—</span><span>Attractiveness effect on hiring decisions is slightly stronger for men than for women in most controlled studies</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 06: WHO IS HARMED -->
+<section>
+  <div class="container">
+    <div class="section-header fade-up">
+      <span class="section-num">06</span>
+      <div>
+        <h2 class="section-title">Who Is Harmed?</h2>
+        <p class="section-sub">Lookism compounds existing inequalities along race, class, disability, and gender</p>
+      </div>
+    </div>
+
+    <div class="split fade-up">
+      <div class="split-body">
+        <p>Lookism does not affect all workers equally. It intersects with race, gender, class, disability, and age — compounding existing inequalities and erecting additional barriers for workers who are already marginalized.</p>
+        <p>For women of color, appearance-based bias layers racial beauty norms onto gender expectations: natural hair, darker skin tones, and non-Eurocentric facial features are frequently excluded from implicit definitions of "professional" appearance. NIH research (2024) confirms that lookism in workplaces disproportionately harms workers with intersecting marginalized identities.</p>
+        <p>Workers with visible disabilities or atypical bodies face appearance-based judgments of competence before a word is spoken. And lower-income workers bear a regressive conformity cost: beauty maintenance — clothing, grooming, cosmetics, and potential procedures — creates a pay-to-conform barrier that punishes those who cannot afford it.</p>
+      </div>
+      <div>
+        <div style="background: var(--surface); padding: 36px; border: 1px solid var(--border);">
+          <p class="label" style="margin-bottom: 20px;">Pressure to conform — by type</p>
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size: 12px; color: var(--muted);">Makeup / Grooming</span>
+                <span style="font-size: 12px; font-weight: 500; color: var(--black);">32%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill tier-4" style="width: 100%;"></div></div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size: 12px; color: var(--muted);">Clothing & Attire</span>
+                <span style="font-size: 12px; font-weight: 500; color: var(--black);">28%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill tier-3" style="width: 87%;"></div></div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size: 12px; color: var(--muted);">Hair Texture / Style</span>
+                <span style="font-size: 12px; font-weight: 500; color: var(--black);">21%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill tier-2" style="width: 65%;"></div></div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size: 12px; color: var(--muted);">Body Weight</span>
+                <span style="font-size: 12px; font-weight: 500; color: var(--black);">13%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill tier-1" style="width: 40%;"></div></div>
+            </div>
+          </div>
+          <p style="font-size: 10px; color: var(--border); margin-top: 24px; letter-spacing: 0.05em; text-transform: uppercase;">Source: Standout CV Survey 2024</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- SECTION 07: SOLUTIONS -->
+<section id="solutions">
+  <div class="container">
+    <div class="section-header fade-up">
+      <span class="section-num">07</span>
+      <div>
+        <h2 class="section-title">What Can Be Done?</h2>
+        <p class="section-sub">Structural, institutional, and cultural responses to appearance bias</p>
+      </div>
+    </div>
+
+    <div class="rec-list fade-up">
+      <div class="rec-item">
+        <div class="rec-num">01</div>
+        <div>
+          <div class="rec-title">Structural Reform</div>
+          <div class="rec-body">Anti-lookism legislation — already enacted in Michigan and Washington D.C. — extends civil rights protections to appearance-based discrimination. Companies can enforce appearance-neutral hiring through blind resume review, structured interviews with standardized rubrics, and explicit anti-bias training for hiring managers.</div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">02</div>
+        <div>
+          <div class="rec-title">Career Center Education</div>
+          <div class="rec-body">University career centers should explicitly address professional appearance bias — teaching students what lookism is, how it operates in specific industries, and how to navigate and advocate within systems shaped by it. This prepares graduates for the reality they will face without requiring expensive conformity or leaving them to discover bias only after it has already cost them an opportunity.</div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">03</div>
+        <div>
+          <div class="rec-title">Redefining Professionalism</div>
+          <div class="rec-body">Expanding what professionalism looks like — beyond a narrow, historically racialized, gendered aesthetic — reduces the conformity tax on marginalized workers and opens access to opportunity based on merit. Organizations that explicitly define professional dress and appearance by function rather than cultural norm reduce bias at its source.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<div class="closing">
+  <div class="container">
+    <p class="closing-statement fade-up">
+      <span class="line-1">The face you were born with</span>
+      <span class="line-2">should not determine the career you can have.</span>
+    </p>
+
+    <div class="closing-stats fade-up">
+      <div class="closing-stat" style="padding-right: 32px;">
+        <div class="closing-stat-val">$250K</div>
+        <div class="closing-stat-lbl">Career earnings gap</div>
+      </div>
+      <div class="closing-stat" style="padding: 0 32px;">
+        <div class="closing-stat-val">81%</div>
+        <div class="closing-stat-lbl">Believe pretty privilege exists</div>
+      </div>
+      <div class="closing-stat" style="padding: 0 32px;">
+        <div class="closing-stat-val">57%</div>
+        <div class="closing-stat-lbl">Of hiring managers admit appearance bias</div>
+      </div>
+      <div class="closing-stat" style="padding-left: 32px;">
+        <div class="closing-stat-val">$149</div>
+        <div class="closing-stat-lbl">Cost to learn you're "not enough"</div>
+      </div>
+    </div>
+
+    <p style="font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.25); line-height: 1.7; max-width: 640px;">
+      Pretty privilege is not a myth, a hashtag, or an individual complaint. It is a measurable, systematic economic force — documented in over four decades of peer-reviewed research — that allocates opportunity based on accident of birth rather than merit, skill, or effort.
+    </p>
+  </div>
+</div>
+
+<!-- SOURCES -->
+<section class="sources-section" id="sources">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num" style="color: var(--border);">—</span>
+      <div>
+        <h2 class="section-title" style="font-size: 28px;">Sources</h2>
+      </div>
+    </div>
+
+    <div class="sources-grid">
+      <div class="source-item"><span class="source-n">1</span><span class="source-txt">Hamermesh, D. S. & Biddle, J. E. (1994). Beauty and the Labor Market. <em>American Economic Review</em>, 84(5), 1174–1194.</span></div>
+      <div class="source-item"><span class="source-n">2</span><span class="source-txt">Hamermesh, D. S. (2011). <em>Beauty Pays: Why Attractive People Are More Successful.</em> Princeton University Press.</span></div>
+      <div class="source-item"><span class="source-n">3</span><span class="source-txt">Standout CV (December 2024). Pretty Privilege Survey — 1,050 Employed Americans. StandoutCV.com.</span></div>
+      <div class="source-item"><span class="source-n">4</span><span class="source-txt">NIH / National Library of Medicine (2024). Lookism, Career Pipeline & Workplace Incivility. PMC11504073.</span></div>
+      <div class="source-item"><span class="source-n">5</span><span class="source-txt">StudyFinds (March 7, 2025). Attractive Workers Earn $20K More Annually. StudyFinds.org.</span></div>
+      <div class="source-item"><span class="source-n">6</span><span class="source-txt">Marcus, B. (July 2025). Too Pretty. Too Plain. How Beauty, Body, and Bias Influence Your Career. Substack.</span></div>
+      <div class="source-item"><span class="source-n">7</span><span class="source-txt">IZA World of Labor. Does It Pay to Be Beautiful? wol.iza.org.</span></div>
+      <div class="source-item"><span class="source-n">8</span><span class="source-txt">Qoves.com — AI Facial Aesthetics Platform. qoves.com. Accessed June 2025.</span></div>
+      <div class="source-item"><span class="source-n">9</span><span class="source-txt">NY Post (March 18, 2025). Pretty Privilege Earns Workers $20K More — Study. nypost.com.</span></div>
+      <div class="source-item"><span class="source-n">10</span><span class="source-txt">University of Texas at Austin News (2011). Beauty Impacts Hiring, Salaries and Profits. news.utexas.edu.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-note">Pretty Privilege — The Economics of Appearance</span>
+    <span class="footer-note">Sources cited throughout · 2024–2025</span>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
